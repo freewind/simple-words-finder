@@ -1,4 +1,4 @@
-import { Configuration } from 'webpack';
+import {Configuration} from 'webpack';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import path from 'path';
 
@@ -15,13 +15,19 @@ const config: Configuration = {
   },
   module: {
     rules: [{
+      test: /\.pcss$/,
+      use: [
+        'style-loader',
+        'postcss-loader'
+      ],
+    }, {
       test: /\.tsx?$/,
       loader: 'ts-loader',
       exclude: /node_modules/
     }]
   },
   plugins: [
-    new HtmlWebpackPlugin()
+    new HtmlWebpackPlugin() as any
   ]
 }
 
