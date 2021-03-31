@@ -3,9 +3,11 @@ import {Word, WordType} from './Word';
 import './SimpleWordsFinder.pcss';
 import {findWords} from './findWords';
 
-const KEY = 'simpleKeys';
+type Props = {
+  bookKey: string
+}
 
-export const SimpleWordsFinder: FC = () => {
+export const SimpleWordsFinder: FC<Props> = ({bookKey}) => {
   const [value, setValue] = useState('');
 
   const [simpleWords, setSimpleWords] = useState<string[]>([]);
@@ -27,13 +29,13 @@ export const SimpleWordsFinder: FC = () => {
   }
 
   useEffect(() => {
-    const simpleWords = window.localStorage.getItem(KEY) ?? ''
-    setSimpleWords([...simpleWords])
-  }, [])
+    const simpleWords = window.localStorage.getItem(bookKey) ?? ''
+    setSimpleWords(simpleWords.split(','))
+  }, [bookKey])
 
   useEffect(() => {
-    window.localStorage.setItem(KEY, simpleWords.join(''))
-  }, [simpleWords])
+    window.localStorage.setItem(bookKey, simpleWords.join(','))
+  }, [bookKey, simpleWords])
 
   function getWordType(word: string): WordType {
     if (simpleWords.includes(word)) {
