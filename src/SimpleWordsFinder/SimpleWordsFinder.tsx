@@ -1,10 +1,10 @@
-import React, {FC, useState, useMemo} from 'react';
+import React, {FC, useState, useMemo, useEffect} from 'react';
 import {Char, CharType} from './Char';
 import './SimpleWordsFinder.pcss';
 
 const KEY = 'simpleKeys';
 
-export const SimpleWordsFinder: FC = ({}) => {
+export const SimpleWordsFinder: FC = () => {
   const [value, setValue] = useState('');
 
   const [simpleChars, setSimpleChars] = useState<string[]>([]);
@@ -25,6 +25,15 @@ export const SimpleWordsFinder: FC = ({}) => {
     }
   }
 
+  useEffect(() => {
+    const simpleChars = window.localStorage.getItem(KEY) ?? ''
+    setSimpleChars([...simpleChars])
+  }, [])
+
+  useEffect(() => {
+    window.localStorage.setItem(KEY, simpleChars.join(''))
+  }, [simpleChars])
+
   function getCharType(char: string): CharType {
     if (simpleChars.includes(char)) {
       return 'simple';
@@ -32,22 +41,11 @@ export const SimpleWordsFinder: FC = ({}) => {
     return 'unknown'
   }
 
-  function load() {
-    const simpleChars = window.localStorage.getItem(KEY) ?? ''
-    setSimpleChars([...simpleChars])
-  }
-
-  function save() {
-    window.localStorage.setItem(KEY, simpleChars.join(''))
-  }
-
   function toggleViewSimpleChars() {
     setViewSimpleChars(v => !v);
   }
 
   return <div>
-    <button type={'button'} onClick={() => load()}>Load</button>
-    <button type={'button'} onClick={() => save()}>Save to local storage ({simpleChars.length})</button>
     <button type={'button'} onClick={() => toggleViewSimpleChars()}>View simple chars ({simpleChars.length})</button>
     <div>
       <div hidden={!viewSimpleChars}>
