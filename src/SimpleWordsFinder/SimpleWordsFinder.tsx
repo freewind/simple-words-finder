@@ -48,7 +48,7 @@ export const SimpleWordsFinder: FC = () => {
   return <div>
     <button type={'button'} onClick={() => toggleViewSimpleChars()}>View simple chars ({simpleChars.length})</button>
     <div>
-      <div hidden={!viewSimpleChars}>
+      <div hidden={!viewSimpleChars} className={'simpleWordsPanel'}>
         {[...simpleChars].map(char => <Char char={char} type={'unknown'}
                                             onClick={() => setSimpleChars(items => items.filter(it => it !== char))}/>)}
       </div>
