@@ -1,6 +1,7 @@
 {
   "scripts": {
-    "demo": "webpack-dev-server --open"
+    "demo": "webpack-dev-server --open",
+    "test": "jest"
   },
   "dependencies": {
     "react": "17.0.1",
@@ -8,6 +9,10 @@
     "ts-node": "9.1.1"
   },
   "devDependencies": {
+    "@types/jest": "26.0.15",
+    "jest": "26.6.1",
+    "ts-jest": "26.4.3",
+    "ts-node": "9.0.0",
     "@types/classnames": "2.2.11",
     "@types/react": "16.9.2",
     "@types/react-dom": "16.9.0",

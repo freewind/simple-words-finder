@@ -1,56 +1,57 @@
 import React, {FC, useState, useMemo, useEffect} from 'react';
-import {Char, CharType} from './Char';
+import {Word, WordType} from './Word';
 import './SimpleWordsFinder.pcss';
+import {findWords} from './findWords';
 
 const KEY = 'simpleKeys';
 
 export const SimpleWordsFinder: FC = () => {
   const [value, setValue] = useState('');
 
-  const [simpleChars, setSimpleChars] = useState<string[]>([]);
-  const [viewSimpleChars, setViewSimpleChars] = useState(false);
+  const [simpleWords, setSimpleWords] = useState<string[]>([]);
+  const [viewSimpleWords, setViewSimpleWords] = useState(false);
 
-  const chars = useMemo(() => [...value], [value])
+  const words = useMemo(() => findWords(value), [value])
 
-  function handleClick(char: string): void {
-    switch (getCharType(char)) {
+  function handleClick(word: string): void {
+    switch (getWordType(word)) {
       case 'simple': {
-        setSimpleChars(items => items.filter(it => it !== char))
+        setSimpleWords(items => items.filter(it => it !== word))
         return;
       }
       case 'unknown' : {
-        setSimpleChars(items => [...items, char])
+        setSimpleWords(items => [...items, word])
         return;
       }
     }
   }
 
   useEffect(() => {
-    const simpleChars = window.localStorage.getItem(KEY) ?? ''
-    setSimpleChars([...simpleChars])
+    const simpleWords = window.localStorage.getItem(KEY) ?? ''
+    setSimpleWords([...simpleWords])
   }, [])
 
   useEffect(() => {
-    window.localStorage.setItem(KEY, simpleChars.join(''))
-  }, [simpleChars])
+    window.localStorage.setItem(KEY, simpleWords.join(''))
+  }, [simpleWords])
 
-  function getCharType(char: string): CharType {
-    if (simpleChars.includes(char)) {
+  function getWordType(word: string): WordType {
+    if (simpleWords.includes(word)) {
       return 'simple';
     }
     return 'unknown'
   }
 
-  function toggleViewSimpleChars() {
-    setViewSimpleChars(v => !v);
+  function toggleViewSimpleWords() {
+    setViewSimpleWords(v => !v);
   }
 
   return <div>
-    <button type={'button'} onClick={() => toggleViewSimpleChars()}>View simple chars ({simpleChars.length})</button>
+    <button type={'button'} onClick={() => toggleViewSimpleWords()}>View simple words ({simpleWords.length})</button>
     <div>
-      <div hidden={!viewSimpleChars} className={'simpleWordsPanel'}>
-        {[...simpleChars].map(char => <Char char={char} type={'unknown'}
-                                            onClick={() => setSimpleChars(items => items.filter(it => it !== char))}/>)}
+      <div hidden={!viewSimpleWords} className={'simpleWordsPanel'}>
+        {[...simpleWords].map(word => <Word word={word} type={'unknown'}
+                                            onClick={() => setSimpleWords(items => items.filter(it => it !== word))}/>)}
       </div>
     </div>
     <div>
@@ -58,7 +59,7 @@ export const SimpleWordsFinder: FC = () => {
                 className={'textarea'}>{value}</textarea>
     </div>
     <div>
-      {chars.map(char => <Char char={char} onClick={handleClick} type={getCharType(char)}/>)}
+      {words.map(word => <Word word={word} onClick={handleClick} type={getWordType(word)}/>)}
     </div>
   </div>;
 }
